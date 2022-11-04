@@ -1,0 +1,13 @@
+
+server:
+  address:     ":8000"
+  openapiPath: "/api.json"
+  swaggerPath: "/swagger"
+database:
+  default:
+    link:  "mysql:root:123456@tcp(127.0.0.1:3306)/workflow?charset=utf8mb4&parseTime=True&loc=Local"
+gfcli:
+  gen:
+    dao:
+      - link:     "mysql:root:123456@tcp(127.0.0.1:3306)/workflow"
+        jsonCase: "CamelLower"
