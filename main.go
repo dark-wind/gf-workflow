@@ -66,7 +66,7 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 
 	// 查流程第一个节点
 	node :=entity.ProcessDefines{}
-	err= g.Model(entity.ProcessDefines{}).Where("process_id", req.ProcessID).Where("")Scan(&node)
+	err= g.Model(entity.ProcessDefines{}).Where("process_id", req.ProcessID).Where("type","start").Scan(&node)
 	if err != nil {
 		return nil, err
 	}
@@ -78,6 +78,10 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 		return nil, err
 	}
 
+	g.Model("task").Insert(&entity.Tasks{
+		StartUserId: user.Id,
+
+	})
 	fmt.Println(user.Name, ctx)
 
 
