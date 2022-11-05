@@ -21,7 +21,7 @@ func createProcess(processName string, version string, comment string) int64 {
 	return processID
 }
 
-func addNode(processId string, nodeName string, nodeType string, nodeInfo string) {
+func addNode(processId string, nodeName string, nodeType string, nodeInfo []byte) {
 	var preNode entity.ProcessDefines
 	g.Model(entity.ProcessDefines{}).Where("process_id", processId).Where("next_id", "").Scan(&preNode)
 	// 第一个节点
@@ -30,6 +30,7 @@ func addNode(processId string, nodeName string, nodeType string, nodeInfo string
 			ProcessId: processId,
 			NodeName:  "开始",
 			Type:      "start",
+			NodeInfo:  gconv.String(nodeInfo),
 		}
 		insert, err := g.Model(entity.ProcessDefines{}).Insert(&node)
 		if err != nil {
@@ -41,7 +42,7 @@ func addNode(processId string, nodeName string, nodeType string, nodeInfo string
 			ProcessId: processId,
 			NodeName:  nodeName,
 			Type:      nodeType,
-			NodeInfo:  nodeInfo,
+			//NodeInfo:  nodeInfo,
 		}
 		newNodeId, err := g.Model(entity.ProcessInfos{}).InsertAndGetId(&newNode)
 		if err != nil {

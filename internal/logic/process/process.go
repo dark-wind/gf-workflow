@@ -124,9 +124,12 @@ func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes
 	return nil, err
 }
 
+// 处理普通类型审批节点
 func NormalMove() {
 
 }
+
+// 处理会签审批节点
 func CountersignMove() {
 
 }
@@ -134,6 +137,7 @@ func CountersignMove() {
 type switchNode struct {
 	Conditions string // 条件
 	RoleID     string // 角色id
+	NodeName   string
 }
 
 func switchMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks {
