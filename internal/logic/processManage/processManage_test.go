@@ -1,25 +1,22 @@
 package processManage
 
 import (
-	"gf-workflow/internal/model/entity"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/test/gtest"
 	"github.com/gogf/gf/v2/util/gconv"
 	"testing"
 
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 )
 
-func Test_ProcessCreate(t *testing.T) {
-	processID := createProcess("新生开学报到流程", "v1", "")
-	var process entity.ProcessInfos
-	g.Model(entity.ProcessInfos{}).Where("id", processID).Scan(&process)
-
-	gtest.C(t, func(t *gtest.T) {
-		t.Assert(process.Id, 1)
-		t.Assert(process.ProcessName, "新生开学报到流程")
-	})
-}
+//func Test_ProcessCreate(t *testing.T) {
+//	processID := createProcess("新生开学报到流程", "v1", "")
+//	var process entity.ProcessInfos
+//	g.Model(entity.ProcessInfos{}).Where("id", processID).Scan(&process)
+//
+//	gtest.C(t, func(t *gtest.T) {
+//		t.Assert(process.Id, 1)
+//		t.Assert(process.ProcessName, "新生开学报到流程")
+//	})
+//}
 
 func Test_AddNode(t *testing.T) {
 	addNode(gconv.String(1), "开始", "start", "")
