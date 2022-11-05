@@ -19,7 +19,7 @@ import (
 //}
 
 func Test_AddNode(t *testing.T) {
-	addNode(gconv.String(1), "开始", "start", "")
+	addNode(gconv.String(1), "开始", "start", "[]")
 	addNode(gconv.String(1), "入学资格审核", "normal", "")
 	addNode(gconv.String(1), "缴费情况审核", "countersign", "")
 	addNode(gconv.String(1), "学历审核", "normal", "")
