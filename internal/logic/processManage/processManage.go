@@ -35,7 +35,6 @@ func addNode(processId string, nodeName string, nodeType string, nodeInfo string
 		g.Model(entity.ProcessDefines{}).Insert(&node)
 	}
 	// 不是第一个节点
-
 	newNode := entity.ProcessDefines{
 		ProcessId: processId,
 		NodeName:  nodeName,
@@ -48,5 +47,6 @@ func addNode(processId string, nodeName string, nodeType string, nodeInfo string
 	}
 	preNode.NextName = nodeName
 	preNode.NextId = gconv.String(newNodeId)
+	g.Model(entity.ProcessDefines{}).Where("id", preNode.Id).Save(&preNode)
 
 }

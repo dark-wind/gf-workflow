@@ -2,6 +2,7 @@ package process
 
 import (
 	"encoding/json"
+	"fmt"
 	"gf-workflow/internal/model/entity"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/test/gtest"
@@ -16,7 +17,7 @@ func Test_SwitchMove(t *testing.T) {
 	task := entity.Tasks{}
 	err := g.Model(entity.Tasks{}).Where("id", 1).Scan(&task)
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
 	nextNode := entity.ProcessDefines{
 		NodeName: "",

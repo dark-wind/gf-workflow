@@ -6,16 +6,16 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-func createUser(name string, pwd string, roleId string, roleName string) entity.Users {
+func createUser(name string, pwd string, roleId string, roleName string) int64 {
 	user := entity.Users{
 		Name:     name,
 		Password: pwd,
 		RoleId:   roleId,
 		RoleName: roleName,
 	}
-	insert, err := g.Model(entity.Users{}).Insert(&user)
+	userId, err := g.Model(entity.Users{}).InsertAndGetId(&user)
 	if err != nil {
-		fmt.Println(insert)
+		fmt.Println(err)
 	}
-	return user
+	return userId
 }

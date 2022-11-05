@@ -6,10 +6,14 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-func createRole(roleName string) {
-	g.Model(entity.Roles{}).Insert(&entity.Roles{
+func createRole(roleName string) int64 {
+	roleId, err := g.Model(entity.Roles{}).InsertAndGetId(&entity.Roles{
 		Name: roleName,
 	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	return roleId
 }
 
 func findRoleById(id int) entity.Roles {
