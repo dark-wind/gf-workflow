@@ -7,6 +7,7 @@ import (
 	"gf-workflow/internal/model/entity"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
+	"strconv"
 )
 
 type StartReq struct {
@@ -60,7 +61,17 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 	}
 
 	g.Model("task").Insert(&entity.Tasks{
-		StartUserId: gconv.String(user.Id),
+		Id:                1,
+		StartUserId:       strconv.FormatUint(user.Id, 10),
+		StartUserName:     user.Name,
+		NodeId:            strconv.FormatUint(node.Id, 10),
+		NodeName:          node.NodeName,
+		ProcessId:         strconv.FormatUint(process.Id, 10),
+		ProcessName:       process.ProcessName,
+		AssigneeRoleId:    node.NextId,
+		AssigneeRoleName:  node.NextName,
+		AssigneeRoleCount: 1,
+		Status:            "run",
 	})
 	fmt.Println(user.Name, ctx)
 	//// 创建task
