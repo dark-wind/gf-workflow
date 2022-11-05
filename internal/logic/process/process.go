@@ -71,7 +71,21 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 }
 
 func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error) {
+	//查用户
+	user := entity.Users{}
+	err = g.Model(entity.Users{}).Where("name", req.Name).Scan(&user)
+	if err != nil {
+		return nil, err
+	}
 
+	//根据user的role_id查task
+	var tasks []entity.Tasks
+	err = g.Model(entity.Users{}).Where("assignee_role_id", user.RoleId).Scan(&tasks)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(tasks)
 	return
 }
 
@@ -109,7 +123,6 @@ func CountersignMove() {
 type switchNode struct {
 	Conditions string // 条件
 	RoleID     string // 角色id
-	NodeName   string
 }
 
 func switchMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks {
