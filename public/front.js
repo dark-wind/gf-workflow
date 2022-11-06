@@ -1,11 +1,14 @@
-let host = "http://127.0.0.1:8000"
+$("#start-button").on("click", function(event){
+    console.log("ababbaa");
+    let Status = $("#Status").val()
+    console.log(Status)
 
-async function pass() {
-    let url = host + "/pass"
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("step0").value = data["PrivateKey"]
-            document.getElementById("step1").value = data["PublicKey"]
-        })
-}
+
+    $.post( "/start",{
+        "ProcessID": "1",
+        "UserID": "9",
+        "Conditions": Status
+    }, function( data ) {
+        console.log(data)
+    });
+});

@@ -12,22 +12,22 @@
 <div id="main">
     <div id="main1">
         <div class="area">
-            <form action="">
+            <div>
                 <label for="UserName">用户名：</label>
                 <input type="text" id="UserName" align="left">
                 <br>
                 <label for="Status">政治面貌：</label>
                 <select name="" id="Status"><br>
-                    <option>党员</option>
-                    <option>共青团员</option>
+                    <option value="党员">党员</option>
+                    <option value="非党员">非党员</option>
                 </select>
                 <br>
                 <label for="Type">申请类型：</label>
                 <select name="" id="Type"><br>
                     <option>报道</option>
                 </select>
-                <input type="submit" value="提交">
-            </form>
+                <button id="start-button">发起流程</button>
+            </div>
 
         </div>
         <div class="area">
@@ -175,12 +175,16 @@
                 {{end}}
             </table>
         </div>
-
     </div>
 
 </div>
 </div>
-<script src="./front.js">
+<script src="../public/jquery-3.6.1.min.js"></script>
+<script src="../public/front.js"></script>
+<script>
+
+
+
 </script>
 </body>
 </html>

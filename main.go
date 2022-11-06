@@ -49,7 +49,7 @@ func main() {
 
 	// 视图
 	s.BindObject("/view", view.View{})
-
+	// 静态文件服务
 	s.SetServerRoot(".")
 	s.Run()
 }
