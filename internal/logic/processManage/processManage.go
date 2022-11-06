@@ -42,9 +42,9 @@ func addNode(processId string, nodeName string, nodeType string, nodeInfo []byte
 			ProcessId: processId,
 			NodeName:  nodeName,
 			Type:      nodeType,
-			//NodeInfo:  nodeInfo,
+			NodeInfo:  gconv.String(nodeInfo),
 		}
-		newNodeId, err := g.Model(entity.ProcessInfos{}).InsertAndGetId(&newNode)
+		newNodeId, err := g.Model(entity.ProcessDefines{}).InsertAndGetId(&newNode)
 		if err != nil {
 			fmt.Println(err)
 		}

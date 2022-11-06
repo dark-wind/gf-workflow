@@ -19,31 +19,36 @@ import (
 //	})
 //}
 
-type switchNode struct {
-	Conditions string // 条件
-	RoleID     string // 角色id
-	NodeName   string
+type normalNodeInfo struct {
+	RoleId   string
+	RoleName string
 }
 
 func Test_AddNode(t *testing.T) {
 
-	structInfo := []switchNode{
-		{
-			Conditions: "党员",
-			RoleID:     "1",
-			NodeName:   "党支部审批",
-		},
-		{
-			Conditions: "非党员",
-			RoleID:     "3",
-			NodeName:   "团支部审批",
-		},
+	startNodeInfo := &normalNodeInfo{
+		RoleId:   "1",
+		RoleName: "招生办",
 	}
-	nodeInfoJson, _ := json.Marshal(&structInfo)
-	addNode(gconv.String(1), "开始", "start", nodeInfoJson)
-	addNode(gconv.String(1), "入学资格审核", "normal", nodeInfoJson)
-	addNode(gconv.String(1), "缴费情况审核", "countersign", nodeInfoJson)
-	addNode(gconv.String(1), "学历审核", "normal", nodeInfoJson)
+
+	startJson, _ := json.Marshal(startNodeInfo)
+
+	xueliNodeInfo := &normalNodeInfo{
+		RoleId:   "4",
+		RoleName: "导师",
+	}
+	xueliJson, _ := json.Marshal(xueliNodeInfo)
+
+	ruzhuNodeInfo := &normalNodeInfo{
+		RoleId:   "7",
+		RoleName: "宿管",
+	}
+	ruzhuJson, _ := json.Marshal(ruzhuNodeInfo)
+
+	addNode(gconv.String(1), "开始", "start", startJson)
+	addNode(gconv.String(1), "入学资格审核", "normal", startJson)
+	//addNode(gconv.String(1), "缴费情况审核", "countersign", startJson)
+	addNode(gconv.String(1), "学历审核", "normal", xueliJson)
 	//addNode(gconv.String(1), "档案接收", "switch", "[{\"Conditions\":\"党员\",\"RoleID\":\"1\",\"NodeName\":\"党支部审批\"},{\"Conditions\":\"非党员\",\"RoleID\":\"3\",\"NodeName\":\"团支部审批\"}]")
-	addNode(gconv.String(1), "入住确认", "normal", nodeInfoJson)
+	addNode(gconv.String(1), "入住确认", "normal", ruzhuJson)
 }
