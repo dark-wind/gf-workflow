@@ -63,12 +63,12 @@ func Test_AddNode(t *testing.T) {
 		{
 			Conditions: "党员",
 			RoleID:     "5",
-			NodeName:   "党支部审批",
+			NodeName:   "党支部",
 		},
 		{
 			Conditions: "非党员",
 			RoleID:     "6",
-			NodeName:   "团支部审批",
+			NodeName:   "团支部",
 		},
 	}
 	switchNodeJson, _ := json.Marshal(&switchNodeInfo)
@@ -94,11 +94,12 @@ func Test_AddNode(t *testing.T) {
 	addNode(gconv.String(1), "学历审核", "normal", xueliJson)
 	addNode(gconv.String(1), "档案接收", "switch", switchNodeJson)
 	addNode(gconv.String(1), "入住确认", "normal", ruzhuJson)
+	addNode(gconv.String(1), "结束", "end", ruzhuJson)
 
 	var lastNode entity.ProcessDefines
 	g.Model(entity.ProcessDefines{}).Where("process_id", "1").Where("next_id", "").Scan(&lastNode)
 
 	gtest.C(t, func(t *gtest.T) {
-		t.Assert(lastNode.NodeName, "入住确认")
+		t.Assert(lastNode.NodeName, "结束")
 	})
 }

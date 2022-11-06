@@ -12,7 +12,7 @@ type View struct{}
 
 func (View) Task(r *ghttp.Request) {
 	var task entity.Tasks
-	g.Model(entity.Tasks{}).Where("id", 3).Scan(&task)
+	g.Model(entity.Tasks{}).Where("id", 6).Scan(&task)
 	data:= g.Map{}
 	if task.AssigneeRoleName == "招生办" {
 		data = g.Map{
@@ -20,18 +20,29 @@ func (View) Task(r *ghttp.Request) {
 			"zsbStartUserName": task.StartUserName,
 		}
 	}
+	if task.AssigneeRoleName == "辅导员,财务处" {
+		data = g.Map{
+			"fdyProcessName":   task.ProcessName,
+			"fdyStartUserName": task.StartUserName,
+			"cwcProcessName":   task.ProcessName,
+			"cwcStartUserName": task.StartUserName,
+		}
+	}
+
 	if task.AssigneeRoleName == "辅导员" {
 		data = g.Map{
 			"fdyProcessName":   task.ProcessName,
 			"fdyStartUserName": task.StartUserName,
 		}
 	}
+
 	if task.AssigneeRoleName == "财务处" {
 		data = g.Map{
 			"cwcProcessName":   task.ProcessName,
 			"cwcStartUserName": task.StartUserName,
 		}
 	}
+
 	if task.AssigneeRoleName == "导师" {
 		data = g.Map{
 			"dsProcessName":   task.ProcessName,

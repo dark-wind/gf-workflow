@@ -257,7 +257,7 @@ func switchMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessD
 	for _, node := range switchList {
 		if task.Conditions == node.Conditions {
 			task.AssigneeRoleId = node.RoleID
-			// 角色名称
+			task.AssigneeRoleName = node.NodeName
 			task.NodeName = node.NodeName
 			ifMatch = 1
 			break
@@ -266,6 +266,8 @@ func switchMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessD
 	if ifMatch == 0 {
 		fmt.Println("流程选择条件错误，没有匹配到对应值: ", err)
 	}
+
+
 	task.NodeId = gconv.String(nextNode.Id)
 	g.Model(entity.Tasks{}).Save(&task)
 
