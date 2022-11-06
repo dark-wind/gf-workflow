@@ -35,8 +35,9 @@ type switchNode struct {
 }
 
 type countersignNode struct {
-	RoleID   string
-	RoleName string
+	RoleID      string
+	RoleName    string
+	IsCompleted string
 }
 
 func Test_AddNode(t *testing.T) {
@@ -74,12 +75,14 @@ func Test_AddNode(t *testing.T) {
 
 	conterSignNodeInfo := []countersignNode{
 		{
-			RoleID:   "2",
-			RoleName: "辅导员",
+			RoleID:      "2",
+			RoleName:    "辅导员",
+			IsCompleted: "no",
 		},
 		{
-			RoleID:   "3",
-			RoleName: "财务处",
+			RoleID:      "3",
+			RoleName:    "财务处",
+			IsCompleted: "no",
 		},
 	}
 	conterSignJson, _ := json.Marshal(&conterSignNodeInfo)

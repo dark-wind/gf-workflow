@@ -7,6 +7,7 @@ import (
 	"gf-workflow/internal/model/entity"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
+	"strings"
 
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 )
@@ -132,6 +133,7 @@ func complete(taskId string) {
 		//最后一个节点
 		task.Status = "finish"
 		task.AssigneeRoleId = ""
+		task.AssigneeRoleName = ""
 		// 角色名称
 		task.NodeName = "结束"
 		g.Model(entity.Tasks{}).Save(&task)
@@ -155,6 +157,12 @@ type normalNode struct {
 	RoleName string // 角色名
 }
 
+type Countersign struct {
+	RoleID      string // 角色id
+	RoleName    string // 角色名
+	IsCompleted string
+}
+
 // 处理普通类型审批节点
 func NormalMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks {
 
@@ -174,20 +182,29 @@ func NormalMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessD
 }
 
 // 处理会签审批节点
-func CountersignMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) {
-	//var CountersignList []normalNode
-	//err := json.Unmarshal(gconv.Bytes(nodeInfoJson), &CountersignList)
-	//if err != nil {
-	//	fmt.Println("json解析错误: ", err)
-	//}
-	//
-	//var roleIds []int64
-	//var roleNames []string
-	//for i, node := range CountersignList {
-	//	roleIds= append(roleIds, gconv.Int64(node.RoleID))
-	//	roleNames = append(roleNames,node.RoleName)
-	//}
+func CountersignMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks {
+	var CountersignList []normalNode
+	err := json.Unmarshal(gconv.Bytes(nodeInfoJson), &CountersignList)
+	if err != nil {
+		fmt.Println("json解析错误: ", err)
+	}
 
+	var roleIds []string
+	var roleNames []string
+	count := 0
+	for _, node := range CountersignList {
+		roleIds = append(roleIds, node.RoleID)
+		roleNames = append(roleNames, node.RoleName)
+		count++
+	}
+	task.AssigneeRoleId = strings.Join(roleIds, ",")
+	task.AssigneeRoleName = strings.Join(roleNames, ",")
+
+	task.NodeId = gconv.String(nextNode.Id)
+	task.NodeName = nextNode.NodeName
+	g.Model(entity.Tasks{}).Save(&task)
+
+	return task
 }
 
 type switchNode struct {

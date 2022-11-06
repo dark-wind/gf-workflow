@@ -50,5 +50,6 @@ func main() {
 	// 视图
 	s.BindObject("/view", view.View{})
 
+	s.SetServerRoot(".")
 	s.Run()
 }
