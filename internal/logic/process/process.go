@@ -126,7 +126,7 @@ func complete(taskId string) {
 	err = g.Model(entity.ProcessDefines{}).Where("id", currentNode.NextId).Scan(&nextNode)
 	// 更新task
 	if nextNode.Type == "normal" {
-		NormalMove()
+		NormalMove(task, nextNode.NodeInfo, nextNode)
 	}
 	if nextNode.Type == "countersign" {
 		CountersignMove(task, nextNode.NodeInfo, nextNode)
@@ -137,9 +137,27 @@ func complete(taskId string) {
 	}
 }
 
-// 处理普通类型审批节点
-func NormalMove() {
+type normalNode struct {
+	RoleID     string // 角色id
+	RoleName   string // 角色名
+}
 
+// 处理普通类型审批节点
+func NormalMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks{
+
+	task.NodeId = gconv.String(nextNode.Id)
+	task.NodeName = nextNode.NodeName
+
+	var normal normalNode
+	err := json.Unmarshal(gconv.Bytes(nodeInfoJson), &normal)
+	if err != nil {
+		fmt.Println("json解析错误: ", err)
+	}
+	task.AssigneeRoleId = normal.RoleID
+	task.AssigneeRoleName = normal.RoleName
+
+	g.Model(entity.Tasks{}).Save(&task)
+	return task
 }
 
 // 处理会签审批节点
