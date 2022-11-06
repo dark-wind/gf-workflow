@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gf-workflow/internal/logic/view"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 
@@ -36,6 +37,7 @@ const (
 
 func main() {
 	s := g.Server()
+	// 工作流引擎
 	s.Group("/", func(group *ghttp.RouterGroup) {
 		group.GET("/try", func(r *ghttp.Request) {
 			r.Response.Write(swaggerUIPageContent)
@@ -44,6 +46,9 @@ func main() {
 			new(process.Process),
 		)
 	})
+
+	// 视图
+	s.BindObject("/view", view.View{})
 
 	s.Run()
 }
