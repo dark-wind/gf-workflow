@@ -12,9 +12,10 @@ import (
 )
 
 type StartReq struct {
-	g.Meta    `path:"/start" method:"post"`
-	ProcessID string `v:"required" dc:"流程ID"`
-	UserID    string `v:"required" dc:"发起用户ID"`
+	g.Meta     `path:"/start" method:"post"`
+	ProcessID  string `v:"required" dc:"流程ID"`
+	UserID     string `v:"required" dc:"发起用户ID"`
+	Conditions string `v:"required" dc:"用于分支判断的值"`
 }
 type StartRes struct {
 	Reply string `dc:"Reply content"`
@@ -69,6 +70,7 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 		NodeName:      node.NodeName,
 		ProcessId:     gconv.String(process.Id),
 		ProcessName:   process.ProcessName,
+		Conditions:    req.Conditions,
 		//开始节点不需要审批，后面调用一次complete
 		//AssigneeRoleId:    "",
 		//AssigneeRoleName:  "",
@@ -124,26 +126,37 @@ func complete(taskId string) {
 
 	nextNode := entity.ProcessDefines{}
 	err = g.Model(entity.ProcessDefines{}).Where("id", currentNode.NextId).Scan(&nextNode)
+
 	// 更新task
-	if nextNode.Type == "normal" {
-		NormalMove(task, nextNode.NodeInfo, nextNode)
-	}
-	if nextNode.Type == "countersign" {
-		CountersignMove(task, nextNode.NodeInfo, nextNode)
+	if nextNode.NextId == "" {
+		//最后一个节点
+		task.Status = "finish"
+		task.AssigneeRoleId = ""
+		// 角色名称
+		task.NodeName = "结束"
+		g.Model(entity.Tasks{}).Save(&task)
+	} else {
+		//正常节点
+		if nextNode.Type == "normal" {
+			NormalMove(task, nextNode.NodeInfo, nextNode)
+		}
+		if nextNode.Type == "countersign" {
+			CountersignMove(task, nextNode.NodeInfo, nextNode)
+		}
+		if nextNode.Type == "switch" {
+			switchMove(task, nextNode.NodeInfo, nextNode)
+		}
 	}
 
-	if nextNode.Type == "switch" {
-		switchMove(task, nextNode.NodeInfo, nextNode)
-	}
 }
 
 type normalNode struct {
-	RoleID     string // 角色id
-	RoleName   string // 角色名
+	RoleID   string // 角色id
+	RoleName string // 角色名
 }
 
 // 处理普通类型审批节点
-func NormalMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks{
+func NormalMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) entity.Tasks {
 
 	task.NodeId = gconv.String(nextNode.Id)
 	task.NodeName = nextNode.NodeName
@@ -162,11 +175,19 @@ func NormalMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessD
 
 // 处理会签审批节点
 func CountersignMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) {
-	var switchList []switchNode
-	err := json.Unmarshal(gconv.Bytes(nodeInfoJson), &switchList)
-	if err != nil {
-		fmt.Println("json解析错误: ", err)
-	}
+	//var CountersignList []normalNode
+	//err := json.Unmarshal(gconv.Bytes(nodeInfoJson), &CountersignList)
+	//if err != nil {
+	//	fmt.Println("json解析错误: ", err)
+	//}
+	//
+	//var roleIds []int64
+	//var roleNames []string
+	//for i, node := range CountersignList {
+	//	roleIds= append(roleIds, gconv.Int64(node.RoleID))
+	//	roleNames = append(roleNames,node.RoleName)
+	//}
+
 }
 
 type switchNode struct {

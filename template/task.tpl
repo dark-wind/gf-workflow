@@ -12,6 +12,7 @@
   </head>
   <body>
     <h1>Hello, world!</h1>
+    {{ taskname }}
     <form>
       <div class="form-group row">
         <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
