@@ -129,7 +129,7 @@ func complete(taskId string) {
 		NormalMove()
 	}
 	if nextNode.Type == "countersign" {
-		CountersignMove()
+		CountersignMove(task, nextNode.NodeInfo, nextNode)
 	}
 
 	if nextNode.Type == "switch" {
@@ -143,8 +143,12 @@ func NormalMove() {
 }
 
 // 处理会签审批节点
-func CountersignMove() {
-
+func CountersignMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessDefines) {
+	var switchList []switchNode
+	err := json.Unmarshal(gconv.Bytes(nodeInfoJson), &switchList)
+	if err != nil {
+		fmt.Println("json解析错误: ", err)
+	}
 }
 
 type switchNode struct {

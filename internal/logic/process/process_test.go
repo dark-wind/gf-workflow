@@ -15,6 +15,10 @@ func TestProcess_Complete(t *testing.T) {
 	})
 }
 
+//func Test_CountersignMove(t *testing.T){
+//
+//}
+
 //func Test_SwitchMove(t *testing.T) {
 //	// mock task nodeInfo nextNode
 //	task := entity.Tasks{}

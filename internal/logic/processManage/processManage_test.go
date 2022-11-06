@@ -33,6 +33,11 @@ type switchNode struct {
 	NodeName   string
 }
 
+type countersignNode struct {
+	RoleID   string
+	RoleName string
+}
+
 func Test_AddNode(t *testing.T) {
 	startNodeInfo := &normalNodeInfo{
 		RoleId:   "1",
@@ -55,20 +60,32 @@ func Test_AddNode(t *testing.T) {
 	switchNodeInfo := []switchNode{
 		{
 			Conditions: "党员",
-			RoleID:     "1",
+			RoleID:     "5",
 			NodeName:   "党支部审批",
 		},
 		{
 			Conditions: "非党员",
-			RoleID:     "3",
+			RoleID:     "6",
 			NodeName:   "团支部审批",
 		},
 	}
 	switchNodeJson, _ := json.Marshal(&switchNodeInfo)
 
+	conterSignNodeInfo := []countersignNode{
+		{
+			RoleID:   "2",
+			RoleName: "辅导员",
+		},
+		{
+			RoleID:   "3",
+			RoleName: "财务处",
+		},
+	}
+	conterSignJson, _ := json.Marshal(&conterSignNodeInfo)
+
 	addNode(gconv.String(1), "开始", "start", startJson)
 	addNode(gconv.String(1), "入学资格审核", "normal", startJson)
-	//addNode(gconv.String(1), "缴费情况审核", "countersign", startJson)
+	addNode(gconv.String(1), "缴费情况审核", "countersign", conterSignJson)
 	addNode(gconv.String(1), "学历审核", "normal", xueliJson)
 	addNode(gconv.String(1), "档案接收", "switch", switchNodeJson)
 	addNode(gconv.String(1), "入住确认", "normal", ruzhuJson)
