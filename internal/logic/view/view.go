@@ -5,14 +5,15 @@ import (
 	"gf-workflow/internal/model/entity"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 type View struct{}
 
 func (View) Task(r *ghttp.Request) {
 	var task entity.Tasks
-	g.Model(entity.Tasks{}).Where("id", 2).Scan(&task)
-	var data g.Map
+	g.Model(entity.Tasks{}).Where("id", 3).Scan(&task)
+	data:= g.Map{}
 	if task.AssigneeRoleName == "招生办" {
 		data = g.Map{
 			"zsbProcessName":   task.ProcessName,
@@ -55,6 +56,9 @@ func (View) Task(r *ghttp.Request) {
 			"sgStartUserName": task.StartUserName,
 		}
 	}
+
+	data["taskId"] = gconv.String(task.Id)
+
 	err := r.Response.WriteTpl("task.tpl", data)
 	if err != nil {
 		fmt.Println(err)
