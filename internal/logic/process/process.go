@@ -7,7 +7,8 @@ import (
 	"gf-workflow/internal/model/entity"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
-	"strconv"
+
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 )
 
 type StartReq struct {
@@ -53,32 +54,37 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 		return nil, err
 	}
 
-	user := entity.Users{}
 	// 查用户
+	user := entity.Users{}
 	err = g.Model(entity.Users{}).Where("id", req.UserID).Scan(&user)
 	if err != nil {
 		return nil, err
 	}
 
-	g.Model("task").Insert(&entity.Tasks{
-		Id:                1,
-		StartUserId:       strconv.FormatUint(user.Id, 10),
-		StartUserName:     user.Name,
-		NodeId:            strconv.FormatUint(node.Id, 10),
-		NodeName:          node.NodeName,
-		ProcessId:         strconv.FormatUint(process.Id, 10),
-		ProcessName:       process.ProcessName,
-		AssigneeRoleId:    node.NextId,
-		AssigneeRoleName:  node.NextName,
-		AssigneeRoleCount: 1,
-		Status:            "run",
+	// 创建task
+	taskId, err := g.Model(entity.Tasks{}).InsertAndGetId(&entity.Tasks{
+		StartUserId:   gconv.String(user.Id),
+		StartUserName: user.Name,
+		NodeId:        gconv.String(node.Id),
+		NodeName:      node.NodeName,
+		ProcessId:     gconv.String(process.Id),
+		ProcessName:   process.ProcessName,
+		//开始节点不需要审批，后面调用一次complete
+		//AssigneeRoleId:    "",
+		//AssigneeRoleName:  "",
+		//AssigneeRoleCount: 1,
+		Status: "run",
 	})
-	fmt.Println(user.Name, ctx)
-	//// 创建task
-	//g.Model(entity.Tasks{}).Insert(&entity.Tasks{
-	//	StartUserId: user,
-	//})
-	return
+	if err != nil {
+		return nil, err
+	}
+
+	//调用一次complete
+	complete(gconv.String(taskId))
+
+	res = &StartRes{}
+	res.Reply = gconv.String(taskId)
+	return res, err
 }
 
 func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error) {
@@ -101,9 +107,17 @@ func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error)
 }
 
 func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes, err error) {
+	complete(req.TaskID)
+	return nil, err
+}
+
+func complete(taskId string) {
 	// 查任务
 	task := entity.Tasks{}
-	err = g.Model(entity.Tasks{}).Where("id", req.TaskID).Scan(&task)
+	err := g.Model(entity.Tasks{}).Where("id", taskId).Scan(&task)
+	if err != nil {
+		return
+	}
 	// 查流程下一个节点
 	currentNode := entity.ProcessDefines{}
 	err = g.Model(entity.ProcessDefines{}).Where("id", task.NodeId).Scan(&currentNode)
@@ -121,7 +135,6 @@ func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes
 	if nextNode.Type == "switch" {
 		switchMove(task, nextNode.NodeInfo, nextNode)
 	}
-	return nil, err
 }
 
 // 处理普通类型审批节点

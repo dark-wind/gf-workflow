@@ -2,6 +2,9 @@ package processManage
 
 import (
 	"encoding/json"
+	"gf-workflow/internal/model/entity"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/test/gtest"
 	"github.com/gogf/gf/v2/util/gconv"
 	"testing"
 
@@ -24,13 +27,17 @@ type normalNodeInfo struct {
 	RoleName string
 }
 
-func Test_AddNode(t *testing.T) {
+type switchNode struct {
+	Conditions string // 条件
+	RoleID     string // 角色id
+	NodeName   string
+}
 
+func Test_AddNode(t *testing.T) {
 	startNodeInfo := &normalNodeInfo{
 		RoleId:   "1",
 		RoleName: "招生办",
 	}
-
 	startJson, _ := json.Marshal(startNodeInfo)
 
 	xueliNodeInfo := &normalNodeInfo{
@@ -45,10 +52,31 @@ func Test_AddNode(t *testing.T) {
 	}
 	ruzhuJson, _ := json.Marshal(ruzhuNodeInfo)
 
+	switchNodeInfo := []switchNode{
+		{
+			Conditions: "党员",
+			RoleID:     "1",
+			NodeName:   "党支部审批",
+		},
+		{
+			Conditions: "非党员",
+			RoleID:     "3",
+			NodeName:   "团支部审批",
+		},
+	}
+	switchNodeJson, _ := json.Marshal(&switchNodeInfo)
+
 	addNode(gconv.String(1), "开始", "start", startJson)
 	addNode(gconv.String(1), "入学资格审核", "normal", startJson)
 	//addNode(gconv.String(1), "缴费情况审核", "countersign", startJson)
 	addNode(gconv.String(1), "学历审核", "normal", xueliJson)
-	//addNode(gconv.String(1), "档案接收", "switch", "[{\"Conditions\":\"党员\",\"RoleID\":\"1\",\"NodeName\":\"党支部审批\"},{\"Conditions\":\"非党员\",\"RoleID\":\"3\",\"NodeName\":\"团支部审批\"}]")
+	addNode(gconv.String(1), "档案接收", "switch", switchNodeJson)
 	addNode(gconv.String(1), "入住确认", "normal", ruzhuJson)
+
+	var lastNode entity.ProcessDefines
+	g.Model(entity.ProcessDefines{}).Where("process_id", "1").Where("next_id", "").Scan(&lastNode)
+
+	gtest.C(t, func(t *gtest.T) {
+		t.Assert(lastNode.NodeName, "入住确认")
+	})
 }
