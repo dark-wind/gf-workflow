@@ -90,7 +90,7 @@ func Test_AddNode(t *testing.T) {
 
 	addNode(gconv.String(1), "开始", "start", startJson)
 	addNode(gconv.String(1), "入学资格审核", "normal", startJson)
-	//addNode(gconv.String(1), "缴费情况审核", "countersign", conterSignJson)
+	addNode(gconv.String(1), "缴费情况审核", "countersign", conterSignJson)
 	addNode(gconv.String(1), "学历审核", "normal", xueliJson)
 	addNode(gconv.String(1), "档案接收", "switch", switchNodeJson)
 	addNode(gconv.String(1), "入住确认", "normal", ruzhuJson)

@@ -83,7 +83,7 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 	}
 
 	//调用一次complete
-	complete(gconv.String(taskId))
+	complete(gconv.String(taskId), gconv.String(user.Id))
 
 	res = &StartRes{}
 	res.Reply = gconv.String(taskId)
@@ -110,21 +110,54 @@ func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error)
 }
 
 func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes, err error) {
-	complete(req.TaskID)
+	complete(req.TaskID, req.UserID)
 	return nil, err
 }
 
-func complete(taskId string) {
+func complete(taskId string, userId string) {
 	// 查任务
 	task := entity.Tasks{}
 	err := g.Model(entity.Tasks{}).Where("id", taskId).Scan(&task)
 	if err != nil {
 		return
 	}
-	// 查流程下一个节点
+
+	user := entity.Users{}
+	err = g.Model(entity.Users{}).Where("id", userId).Scan(&user)
+	if err != nil {
+		return
+	}
+	// 查流程当前节点
 	currentNode := entity.ProcessDefines{}
 	err = g.Model(entity.ProcessDefines{}).Where("id", task.NodeId).Scan(&currentNode)
+	if currentNode.Type == "countersign" {
+		// 先审批，后减少，最后往下
+		roleIds := strings.Split(task.AssigneeRoleId, ",")
+		roleNames := strings.Split(task.AssigneeRoleName, ",")
+		var newRoleIds []string
+		for _, roleId := range roleIds {
+			if user.RoleId == roleId {
+				continue
+			}
+			newRoleIds = append(newRoleIds, roleId)
+		}
+		var newRoleNames []string
+		for _, roleName := range roleNames {
+			if user.RoleName == roleName {
+				continue
+			}
+			newRoleNames = append(newRoleNames, roleName)
+		}
+		task.AssigneeRoleId = strings.Join(newRoleIds, ",")
+		task.AssigneeRoleName = strings.Join(newRoleNames, ",")
+		// 如果所有角色都审批了，可以推下一步，否则返回
+		if len(newRoleNames) != 0 {
+			g.Model(entity.Tasks{}).Save(&task)
+			return
+		}
+	}
 
+	// 查流程下一个节点
 	nextNode := entity.ProcessDefines{}
 	err = g.Model(entity.ProcessDefines{}).Where("id", currentNode.NextId).Scan(&nextNode)
 
