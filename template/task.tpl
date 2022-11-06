@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -39,13 +39,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .zsbStartUserName}}
                 <tr>
                     <th>{{.zsbStartUserName}}</th>
                     <th>{{.zsbProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass(1)">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
         <div class="area">
@@ -57,13 +59,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .fdyStartUserName}}
                 <tr>
                     <th>{{.fdyStartUserName}}</th>
                     <th>{{.fdyProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
     </div>
@@ -77,13 +81,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .cwcStartUserName}}
                 <tr>
                     <th>{{.cwcStartUserName}}</th>
                     <th>{{.cwcProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
         <div class="area">
@@ -95,13 +101,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .dsStartUserName}}
                 <tr>
                     <th>{{.dsStartUserName}}</th>
                     <th>{{.dsProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass()">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
         <div class="area">
@@ -113,13 +121,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .dzbStartUserName}}
                 <tr>
                     <th>{{.dzbStartUserName}}</th>
                     <th>{{.dzbProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
 
@@ -134,13 +144,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .tzbStartUserName}}
                 <tr>
                     <th>{{.tzbStartUserName}}</th>
                     <th>{{.tzbProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
         <div class="area">
@@ -152,13 +164,15 @@
                     <th>审批类型</th>
                     <th>操作</th>
                 </tr>
+                {{if .sgStartUserName}}
                 <tr>
                     <th>{{.sgStartUserName}}</th>
                     <th>{{.sgProcessName}}</th>
-                    <th><button>通过</button>
-                        <button>驳回</button>
+                    <th><button onclick="pass">通过</button>
+                        <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
+                {{end}}
             </table>
         </div>
 
@@ -166,5 +180,7 @@
 
 </div>
 </div>
+<script src="./front.js">
+</script>
 </body>
 </html>
