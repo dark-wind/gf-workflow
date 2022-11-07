@@ -9,7 +9,7 @@ import (
 )
 
 func Test_UserCreate(t *testing.T) {
-	createUser("蔡徐坤", "123456", "0", "练习生")
+	createUser("菜虚鲲", "123456", "0", "练习生")
 
 	roles := []string{
 		"招生办",

@@ -13,7 +13,7 @@
     <div id="main1">
         <div class="area">
             <div>
-                <h6>用户名：蔡徐坤</h6>
+                <h6>用户名：菜虚鲲</h6>
                 <br>
                 <label for="Status">政治面貌：</label>
                 <select name="" id="Status"><br>
