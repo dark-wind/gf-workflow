@@ -12,8 +12,8 @@ type View struct{}
 
 func (View) Task(r *ghttp.Request) {
 	var task entity.Tasks
-	g.Model(entity.Tasks{}).Where("id", 6).Scan(&task)
-	data:= g.Map{}
+	g.Model(entity.Tasks{}).Where("id", 5).Scan(&task)
+	data := g.Map{}
 	if task.AssigneeRoleName == "招生办" {
 		data = g.Map{
 			"zsbProcessName":   task.ProcessName,

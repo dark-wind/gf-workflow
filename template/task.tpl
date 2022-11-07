@@ -43,7 +43,7 @@
                 <tr>
                     <th>{{.zsbStartUserName}}</th>
                     <th>{{.zsbProcessName}}</th>
-                    <th><button onclick="pass(1)">通过</button>
+                    <th><button id="zsb-submit">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
@@ -63,7 +63,7 @@
                 <tr>
                     <th>{{.fdyStartUserName}}</th>
                     <th>{{.fdyProcessName}}</th>
-                    <th><button onclick="pass">通过</button>
+                    <th><button id="fdy-submit" onclick="pass()">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
@@ -85,7 +85,7 @@
                 <tr>
                     <th>{{.cwcStartUserName}}</th>
                     <th>{{.cwcProcessName}}</th>
-                    <th><button onclick="pass">通过</button>
+                    <th><button id="cwc-submit">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
@@ -105,7 +105,7 @@
                 <tr>
                     <th>{{.dsStartUserName}}</th>
                     <th>{{.dsProcessName}}</th>
-                    <th><button onclick="pass()">通过</button>
+                    <th><button id="ds-submit">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
@@ -125,7 +125,7 @@
                 <tr>
                     <th>{{.dzbStartUserName}}</th>
                     <th>{{.dzbProcessName}}</th>
-                    <th><button onclick="pass">通过</button>
+                    <th><button id="dzb-submit">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
@@ -148,7 +148,7 @@
                 <tr>
                     <th>{{.tzbStartUserName}}</th>
                     <th>{{.tzbProcessName}}</th>
-                    <th><button onclick="pass">通过</button>
+                    <th><button id="tzb-submit">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
@@ -168,7 +168,7 @@
                 <tr>
                     <th>{{.sgStartUserName}}</th>
                     <th>{{.sgProcessName}}</th>
-                    <th><button onclick="pass">通过</button>
+                    <th><button id="sg-submit">通过</button>
                         <button onclick="refuse">驳回</button>
                     </th>
                 </tr>
