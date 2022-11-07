@@ -1,9 +1,12 @@
-#main{
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%,0);
-
+#left{
+    height: 900px;
+    width: 300px;
+    float: left;
+}
+#right{
+    height: 300px;
+    width: 1000px;
+    float: left;
 }
 
 #main1{

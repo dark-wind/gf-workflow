@@ -79,6 +79,17 @@ func (View) Task(r *ghttp.Request) {
 	}
 
 	data["taskId"] = gconv.String(task.Id)
+	data["StartUserId"] = task.StartUserId
+	data["StartUserName"] = task.StartUserName
+	data["NodeId"] = task.NodeId
+	data["NodeName"] = task.NodeName
+	data["ProcessId"] = task.ProcessId
+	data["ProcessName"] = task.ProcessName
+	data["AssigneeRoleId"] = task.AssigneeRoleId
+	data["AssigneeRoleName"] = task.AssigneeRoleName
+	data["Conditions"]=task.Conditions
+	data["Status"]=task.Status
+
 	data["list"] = list
 
 	err := r.Response.WriteTpl("task.tpl", data)
