@@ -13,8 +13,7 @@
     <div id="main1">
         <div class="area">
             <div>
-                <label for="UserName">用户名：</label>
-                <input type="text" id="UserName" align="left">
+                <h6>用户名：蔡徐坤</h6>
                 <br>
                 <label for="Status">政治面貌：</label>
                 <select name="" id="Status"><br>
@@ -22,9 +21,11 @@
                     <option value="非党员">非党员</option>
                 </select>
                 <br>
-                <label for="Type">申请类型：</label>
+                <label for="Type">流程选择：</label>
                 <select name="" id="Type"><br>
-                    <option>报道</option>
+                    {{range $key, $value := .list}}
+                    <option value="{{$key}}">{{$value}}</option>
+                    {{end}}
                 </select>
                 <button id="start-button">发起流程</button>
             </div>
@@ -51,7 +52,7 @@
             </table>
         </div>
         <div class="area">
-            <h6>用户名：路飞</h6>
+            <h6>用户名：冯宝宝</h6>
             <h6>用户角色：辅导员</h6>
             <table border="1">
                 <tr>
@@ -73,7 +74,7 @@
     </div>
     <div id="main2">
         <div class="area">
-            <h6>用户名：路飞</h6>
+            <h6>用户名：范闲</h6>
             <h6>用户角色：财务处</h6>
             <table border="1">
                 <tr>
@@ -93,7 +94,7 @@
             </table>
         </div>
         <div class="area">
-            <h6>用户名：路飞</h6>
+            <h6>用户名：阿贝尔</h6>
             <h6>用户角色：导师</h6>
             <table border="1">
                 <tr>
@@ -113,7 +114,7 @@
             </table>
         </div>
         <div class="area">
-            <h6>用户名：路飞</h6>
+            <h6>用户名：五条悟</h6>
             <h6>用户角色：党支部</h6>
             <table border="1">
                 <tr>
@@ -136,7 +137,7 @@
     </div>
     <div id="main3">
         <div class="area">
-            <h6>用户名：路飞</h6>
+            <h6>用户名：川建国</h6>
             <h6>用户角色：团支部</h6>
             <table border="1">
                 <tr>
@@ -156,7 +157,7 @@
             </table>
         </div>
         <div class="area">
-            <h6>用户名：路飞</h6>
+            <h6>用户名：栗子姨</h6>
             <h6>用户角色：宿管</h6>
             <table border="1">
                 <tr>
@@ -181,10 +182,5 @@
 </div>
 <script src="../public/jquery-3.6.1.min.js"></script>
 <script src="../public/front.js"></script>
-<script>
-
-
-
-</script>
 </body>
 </html>

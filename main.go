@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gf-workflow/internal/logic/processManage"
 	"gf-workflow/internal/logic/view"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -17,11 +18,11 @@ const (
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="SwaggerUI"/>
   <title>SwaggerUI</title>
-  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@latest/swagger-ui.css" />
+  <link rel="stylesheet" href="public/swagger-ui.css" />
 </head>
 <body>
 <div id="swagger-ui"></div>
-<script src="https://unpkg.com/swagger-ui-dist@latest/swagger-ui-bundle.js" crossorigin></script>
+<script src="public/swagger-ui-bundle.js" crossorigin></script>
 <script>
 	window.onload = () => {
 		window.ui = SwaggerUIBundle({
@@ -44,6 +45,7 @@ func main() {
 		})
 		group.Bind(
 			new(process.Process),
+			new(processManage.ProcessManage),
 		)
 	})
 

@@ -13,6 +13,16 @@ type View struct{}
 func (View) Task(r *ghttp.Request) {
 	var task entity.Tasks
 	g.Model(entity.Tasks{}).Where("id", 5).Scan(&task)
+
+	var processList []entity.ProcessInfos
+	g.Model(entity.ProcessInfos{}).Scan(&processList)
+
+	list := map[uint64]string{}
+
+	for _, infos := range processList {
+		list[infos.Id] = infos.ProcessName
+	}
+
 	data := g.Map{}
 	if task.AssigneeRoleName == "招生办" {
 		data = g.Map{
@@ -69,6 +79,7 @@ func (View) Task(r *ghttp.Request) {
 	}
 
 	data["taskId"] = gconv.String(task.Id)
+	data["list"] = list
 
 	err := r.Response.WriteTpl("task.tpl", data)
 	if err != nil {

@@ -1,12 +1,33 @@
 package processManage
 
 import (
+	"context"
 	"fmt"
 	"gf-workflow/internal/model/entity"
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
 )
+
+type ProcessManage struct{}
+
+type ListReq struct {
+	g.Meta `path:"/manage/list" method:"get"`
+}
+type ListRes struct {
+	Reply string                `dc:"Reply content"`
+	Data  []entity.ProcessInfos `json:"data"`
+}
+
+func (ProcessManage) List(ctx context.Context, req *ListReq) (res *ListRes, err error) {
+	res = &ListRes{}
+	err = g.Model(entity.ProcessInfos{}).Scan(&res.Data)
+	if err != nil {
+		return nil, err
+	}
+	g.RequestFromCtx(ctx).Response.WriteJson(res)
+	return res, err
+}
 
 func createProcess(processName string, version string, comment string) int64 {
 	process := entity.ProcessInfos{

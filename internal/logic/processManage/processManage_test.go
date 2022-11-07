@@ -4,16 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"gf-workflow/internal/model/entity"
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/test/gtest"
 	"github.com/gogf/gf/v2/util/gconv"
 	"testing"
-
-	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 )
 
 //func Test_ProcessCreate(t *testing.T) {
 //	processID := createProcess("新生开学报到流程", "v1", "")
+//	processID = createProcess("退学流程", "v1", "")
+//	processID = createProcess("报销流程", "v1", "")
+//	processID = createProcess("订单流程", "v1", "")
+//
 //	var process entity.ProcessInfos
 //	g.Model(entity.ProcessInfos{}).Where("id", processID).Scan(&process)
 //

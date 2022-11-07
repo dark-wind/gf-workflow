@@ -1,5 +1,4 @@
 $("#start-button").on("click", function(event){
-    console.log("ababbaa");
     let Status = $("#Status").val()
     console.log(Status)
 
