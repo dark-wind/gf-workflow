@@ -12,7 +12,7 @@ type View struct{}
 
 func (View) Task(r *ghttp.Request) {
 	var task entity.Tasks
-	g.Model(entity.Tasks{}).Where("id", 5).Scan(&task)
+	g.Model(entity.Tasks{}).Where("process_name", "新生开学报到流程").Scan(&task)
 
 	var processList []entity.ProcessInfos
 	g.Model(entity.ProcessInfos{}).Scan(&processList)

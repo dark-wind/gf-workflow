@@ -21,7 +21,7 @@ import (
 //	g.Model(entity.ProcessInfos{}).Where("id", processID).Scan(&process)
 //
 //	gtest.C(t, func(t *gtest.T) {
-//		t.Assert(process.Id, 1)
+//		t.Assert(process.Id, 4)
 //		t.Assert(process.ProcessName, "新生开学报到流程")
 //	})
 //}
