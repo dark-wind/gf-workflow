@@ -4,10 +4,11 @@ $("#start-button").on("click", function(event){
 
     $.post( "/start",{
         "ProcessID": "1",
-        "UserID": "16",
+        "UserID": "1",
         "Conditions": Status
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
 
@@ -18,9 +19,10 @@ $("#zsb-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "9"
+        "UserID": "2"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
 
@@ -31,9 +33,10 @@ $("#fdy-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "10"
+        "UserID": "3"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
 
@@ -44,10 +47,12 @@ $("#cwc-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "11"
+        "UserID": "4"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
+
 });
 
 $("#ds-submit").on("click", function(event){
@@ -57,9 +62,10 @@ $("#ds-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "12"
+        "UserID": "5"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
 
@@ -70,9 +76,10 @@ $("#dzb-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "13"
+        "UserID": "6"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
 
@@ -83,9 +90,10 @@ $("#tzb-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "14"
+        "UserID": "7"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
 
@@ -96,8 +104,9 @@ $("#sg-submit").on("click", function(event){
 
     $.post( "/complete",{
         "TaskID": taskId,
-        "UserID": "15"
+        "UserID": "8"
     }, function( data ) {
         console.log(data)
+        location.reload()
     });
 });
