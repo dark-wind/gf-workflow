@@ -115,6 +115,17 @@ func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes
 	return nil, err
 }
 
+func (Process)Reject(){
+	
+}
+func (Process)Dispatch()  {
+	
+}
+
+func (Process)UpdateTask()  {
+
+}
+
 func complete(taskId string, userId string) {
 	// 查任务
 	task := entity.Tasks{}
