@@ -33,10 +33,11 @@ type CompleteRes struct {
 
 type ListReq struct {
 	g.Meta `path:"/list" method:"get"`
-	Name   string `v:"required" dc:"Your name"`
+	UserID string `v:"required" dc:"当前用户ID"`
 }
 type ListRes struct {
 	Reply string `dc:"Reply content"`
+	Data  []entity.Tasks `json:"data"`
 }
 
 type Process struct{}
@@ -93,20 +94,20 @@ func (Process) Start(ctx context.Context, req *StartReq) (res *StartRes, err err
 func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error) {
 	//查用户
 	user := entity.Users{}
-	err = g.Model(entity.Users{}).Where("name", req.Name).Scan(&user)
+	err = g.Model(entity.Users{}).Where("id", req.UserID).Scan(&user)
 	if err != nil {
 		return nil, err
 	}
 
+	res = &ListRes{}
 	//根据user的role_id查task
-	var tasks []entity.Tasks
-	err = g.Model(entity.Users{}).Where("assignee_role_id", user.RoleId).Scan(&tasks)
+	//var tasks []entity.Tasks
+	err = g.Model(entity.Tasks{}).Where("assignee_role_id", user.RoleId).Scan(&res.Data)
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(tasks)
-	return
+	g.RequestFromCtx(ctx).Response.WriteJson(res)
+	return res, err
 }
 
 func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes, err error) {
