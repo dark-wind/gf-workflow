@@ -36,8 +36,34 @@ type ListReq struct {
 	UserID string `v:"required" dc:"当前用户ID"`
 }
 type ListRes struct {
-	Reply string `dc:"Reply content"`
+	Reply string         `dc:"Reply content"`
 	Data  []entity.Tasks `json:"data"`
+}
+
+type RejectReq struct {
+	g.Meta `path:"/reject" method:"post"`
+	TaskID string `v:"required" dc:"任务ID"`
+}
+type RejectRes struct {
+	Reply string `dc:"Reply content"`
+}
+
+type DispatchReq struct {
+	g.Meta `path:"/dispatch" method:"post"`
+	TaskID string `v:"required" dc:"任务ID"`
+	RoleID string `v:"required" dc:"角色ID"`
+}
+type DispatchRes struct {
+	Reply string `dc:"Reply content"`
+}
+
+type UpdateReq struct {
+	g.Meta     `path:"/update" method:"post"`
+	TaskID     string `v:"required" dc:"任务ID"`
+	Conditions string `v:"required" dc:"相关数据"`
+}
+type UpdateRes struct {
+	Reply string `dc:"Reply content"`
 }
 
 type Process struct{}
@@ -115,15 +141,55 @@ func (Process) Complete(ctx context.Context, req *CompleteReq) (res *CompleteRes
 	return nil, err
 }
 
-func (Process)Reject(){
-	
+func (Process) Reject(ctx context.Context, req *RejectReq) (res *RejectRes, err error) {
+	// 查任务
+	task := entity.Tasks{}
+	err = g.Model(entity.Tasks{}).Where("id", req.TaskID).Scan(&task)
+	if err != nil {
+		return
+	}
+	task.Status = "fail"
+	result, err := g.Model(entity.Tasks{}).Save(&task)
+	if err != nil {
+		fmt.Println(result, err)
+		return nil, err
+	}
+	res = &RejectRes{}
+	g.RequestFromCtx(ctx).Response.WriteJson(res)
+	return res, err
 }
-func (Process)Dispatch()  {
-	
+func (Process) Dispatch(ctx context.Context, req *DispatchReq) (res *DispatchRes, err error) {
+	task := entity.Tasks{}
+	err = g.Model(entity.Tasks{}).Where("id", req.TaskID).Scan(&task)
+	if err != nil {
+		return
+	}
+	task.Status = "fail"
+	result, err := g.Model(entity.Tasks{}).Save(&task)
+	if err != nil {
+		fmt.Println(result, err)
+		return nil, err
+	}
+	res = &DispatchRes{}
+	g.RequestFromCtx(ctx).Response.WriteJson(res)
+	return res, err
 }
 
-func (Process)UpdateTask()  {
-
+func (Process) UpdateTask(ctx context.Context, req *UpdateReq) (res *UpdateRes, err error) {
+	task := entity.Tasks{}
+	err = g.Model(entity.Tasks{}).Where("id", req.TaskID).Scan(&task)
+	if err != nil {
+		return
+	}
+	task.Status = "fail"
+	result, err := g.Model(entity.Tasks{}).Save(&task)
+	if err != nil {
+		fmt.Println(result, err)
+		return nil, err
+	}
+	res = &UpdateRes{}
+	g.RequestFromCtx(ctx).Response.WriteJson(res)
+	return res, err
 }
 
 func complete(taskId string, userId string) {
@@ -278,7 +344,6 @@ func switchMove(task entity.Tasks, nodeInfoJson string, nextNode entity.ProcessD
 	if ifMatch == 0 {
 		fmt.Println("流程选择条件错误，没有匹配到对应值: ", err)
 	}
-
 
 	task.NodeId = gconv.String(nextNode.Id)
 	g.Model(entity.Tasks{}).Save(&task)
