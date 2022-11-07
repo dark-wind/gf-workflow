@@ -128,7 +128,7 @@ func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error)
 	res = &ListRes{}
 	//根据user的role_id查task
 	//var tasks []entity.Tasks
-	err = g.Model(entity.Tasks{}).Where("assignee_role_id", user.RoleId).Scan(&res.Data)
+	err = g.Model(entity.Tasks{}).Where("assignee_role_id", user.RoleId).Where("status", "run").Scan(&res.Data)
 	if err != nil {
 		return nil, err
 	}
@@ -149,11 +149,16 @@ func (Process) Reject(ctx context.Context, req *RejectReq) (res *RejectRes, err 
 		return
 	}
 	task.Status = "fail"
+	task.AssigneeRoleName = ""
+	task.AssigneeRoleId = ""
+	task.NodeId = ""
+	task.NodeName = "被驳回，流程结束"
 	result, err := g.Model(entity.Tasks{}).Save(&task)
 	if err != nil {
 		fmt.Println(result, err)
 		return nil, err
 	}
+
 	res = &RejectRes{}
 	g.RequestFromCtx(ctx).Response.WriteJson(res)
 	return res, err
@@ -164,12 +169,19 @@ func (Process) Dispatch(ctx context.Context, req *DispatchReq) (res *DispatchRes
 	if err != nil {
 		return
 	}
-	task.Status = "fail"
+
+	role := entity.Roles{}
+	err = g.Model(entity.Roles{}).Where("id", req.RoleID).Scan(&role)
+
+	task.AssigneeRoleId = gconv.String(role.Id)
+	task.AssigneeRoleName = role.Name
+
 	result, err := g.Model(entity.Tasks{}).Save(&task)
 	if err != nil {
 		fmt.Println(result, err)
 		return nil, err
 	}
+
 	res = &DispatchRes{}
 	g.RequestFromCtx(ctx).Response.WriteJson(res)
 	return res, err
@@ -181,7 +193,8 @@ func (Process) UpdateTask(ctx context.Context, req *UpdateReq) (res *UpdateRes, 
 	if err != nil {
 		return
 	}
-	task.Status = "fail"
+
+	task.Conditions = req.Conditions
 	result, err := g.Model(entity.Tasks{}).Save(&task)
 	if err != nil {
 		fmt.Println(result, err)
