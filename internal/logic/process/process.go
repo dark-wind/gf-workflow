@@ -13,7 +13,7 @@ import (
 )
 
 type StartReq struct {
-	g.Meta     `path:"/start" method:"post"`
+	g.Meta     `path:"/start" method:"post" summary:"发起流程" tags:"流程控制"`
 	ProcessID  string `v:"required" dc:"流程ID"`
 	UserID     string `v:"required" dc:"发起用户ID"`
 	Conditions string `v:"required" dc:"用于分支判断的值"`
@@ -23,7 +23,7 @@ type StartRes struct {
 }
 
 type CompleteReq struct {
-	g.Meta `path:"/complete" method:"post"`
+	g.Meta `path:"/complete" method:"post" summary:"完成当前任务" tags:"流程控制"`
 	TaskID string `v:"required" dc:"任务ID"`
 	UserID string `v:"required" dc:"完成当前任务的用户ID"`
 }
@@ -32,7 +32,7 @@ type CompleteRes struct {
 }
 
 type ListReq struct {
-	g.Meta `path:"/list" method:"get"`
+	g.Meta `path:"/list" method:"get" summary:"工作列表" tags:"流程控制"`
 	UserID string `v:"required" dc:"当前用户ID"`
 }
 type ListRes struct {
@@ -41,7 +41,7 @@ type ListRes struct {
 }
 
 type RejectReq struct {
-	g.Meta `path:"/reject" method:"post"`
+	g.Meta `path:"/reject" method:"post" summary:"驳回" tags:"流程控制"`
 	TaskID string `v:"required" dc:"任务ID"`
 }
 type RejectRes struct {
@@ -49,7 +49,7 @@ type RejectRes struct {
 }
 
 type DispatchReq struct {
-	g.Meta `path:"/dispatch" method:"post"`
+	g.Meta `path:"/dispatch" method:"post" summary:"重新指派候选人角色" tags:"流程控制"`
 	TaskID string `v:"required" dc:"任务ID"`
 	RoleID string `v:"required" dc:"角色ID"`
 }
@@ -58,7 +58,7 @@ type DispatchRes struct {
 }
 
 type UpdateReq struct {
-	g.Meta     `path:"/update" method:"post"`
+	g.Meta     `path:"/update" method:"post" summary:"修改任务的相关数据" tags:"流程控制"`
 	TaskID     string `v:"required" dc:"任务ID"`
 	Conditions string `v:"required" dc:"相关数据"`
 }
@@ -127,8 +127,8 @@ func (Process) List(ctx context.Context, req *ListReq) (res *ListRes, err error)
 
 	res = &ListRes{}
 	//根据user的role_id查task
-	//var tasks []entity.Tasks
-	err = g.Model(entity.Tasks{}).Where("assignee_role_id", user.RoleId).Where("status", "run").Scan(&res.Data)
+	//err = g.Model(entity.Tasks{}).Where("assignee_role_id", user.RoleId).Where("status", "run").Scan(&res.Data)
+	g.Model(entity.Tasks{}).WhereLike("assignee_role_name", "%"+user.RoleName+"%").Where("status", "run").Scan(&res.Data)
 	if err != nil {
 		return nil, err
 	}

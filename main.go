@@ -2,6 +2,7 @@ package main
 
 import (
 	"gf-workflow/internal/logic/processManage"
+	"gf-workflow/internal/logic/user"
 	"gf-workflow/internal/logic/view"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -46,6 +47,8 @@ func main() {
 		group.Bind(
 			new(process.Process),
 			new(processManage.ProcessManage),
+			new(user.User),
+			new(user.Role),
 		)
 	})
 

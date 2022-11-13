@@ -12,9 +12,32 @@ import (
 type ProcessManage struct{}
 
 type ListReq struct {
-	g.Meta `path:"/manage/list" method:"get"`
+	g.Meta `path:"/manage/list" method:"get" summary:"流程列表" tags:"模型管理"`
 }
 type ListRes struct {
+	Reply string                `dc:"Reply content"`
+	Data  []entity.ProcessInfos `json:"data"`
+}
+
+type CreateReq struct {
+	g.Meta      `path:"/manage/create" method:"post" summary:"新建流程" tags:"模型管理"`
+	ProcessName string `v:"required" dc:"流程名称"`
+	Version     string `v:"required" dc:"版本号"`
+	Comment     string ` dc:"备注"`
+}
+type CreateRes struct {
+	Reply string                `dc:"Reply content"`
+	Data  []entity.ProcessInfos `json:"data"`
+}
+
+type AddNodeReq struct {
+	g.Meta    `path:"/manage/add-node" method:"post" summary:"添加节点" tags:"模型管理"`
+	ProcessId string `v:"required" dc:"所属流程ID"`
+	NodeName  string `v:"required" dc:"节点名称"`
+	NodeInfo  []byte `v:"required" dc:"节点信息"`
+	NodeType  string `v:"required" dc:"节点类型"`
+}
+type AddNodeRes struct {
 	Reply string                `dc:"Reply content"`
 	Data  []entity.ProcessInfos `json:"data"`
 }
@@ -26,6 +49,21 @@ func (ProcessManage) List(ctx context.Context, req *ListReq) (res *ListRes, err 
 		return nil, err
 	}
 	g.RequestFromCtx(ctx).Response.WriteJson(res)
+	return res, err
+}
+
+func (ProcessManage) Create(ctx context.Context, req *CreateReq) (res *CreateRes, err error) {
+	processId := createProcess(req.ProcessName, req.Version, req.Comment)
+
+	res = &CreateRes{}
+	g.RequestFromCtx(ctx).Response.WriteJson(processId)
+	return res, err
+}
+
+func (ProcessManage) AddNode(ctx context.Context, req *AddNodeReq) (res *AddNodeRes, err error) {
+	addNode(req.ProcessId, req.NodeName, req.NodeType, req.NodeInfo)
+	//res = &AddNodeReq{}
+	//g.RequestFromCtx(ctx).Response.WriteJson(processId)
 	return res, err
 }
 
